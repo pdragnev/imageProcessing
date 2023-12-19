@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 
 # Read the input
 img = cv2.imread('images/ZV1zy.jpg')
@@ -27,8 +28,20 @@ sharpened_image = cv2.filter2D(filtered_img, -1, kernel)
 new_width, new_height = img.shape[1], img.shape[0]  # Keep original dimensions or set new ones
 upscaled_image = cv2.resize(sharpened_image, (new_width, new_height), interpolation=cv2.INTER_CUBIC)
 
-# Save results
-cv2.imwrite('processed/ZV1zy_v6.jpg', upscaled_image)
+# Calculate the center of the image (splitting in half)
+center_x = upscaled_image.shape[1] // 2
+
+# Split the image into left and right halves
+left_half = upscaled_image[:, :center_x]
+right_half = upscaled_image[:, center_x:]
+
+# Save the full enhanced image
+cv2.imwrite('processed/ZV1zy_v7.jpg', upscaled_image)
+
+# Save each half
+cv2.imwrite('processed/ZV1zy_v7_left_half.jpg', left_half)
+cv2.imwrite('processed/ZV1zy_v7_right_half.jpg', right_half)
+
 
 # Optionally, show the result
 cv2.imshow('Enhanced Color Image', upscaled_image)
